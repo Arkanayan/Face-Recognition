@@ -6,10 +6,12 @@ import cv2
 import face_recognition
 from PIL import Image
 import argparse
+import csv
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--images-dir", help="training image dir")
 parser.add_argument("-v", "--video", help="video to recognize faces on")
+parser.add_argument("-o", "--output-csv", help="Ouput csv file")
 args = vars(parser.parse_args())
 
 if args.get("images_dir", None) is None:
@@ -93,7 +95,14 @@ for file in image_files_in_folder(args['images_dir']):
 
 ret, firstFrame = cap.read()
 
+csvfile = None
+csvwriter = None
+if args.get("output_csv", None) is not None:
+    csvfile = open(args.get("output_csv"), 'w')
+    csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+
 while ret:
+    curr_frame = cap.get(1)
 
     ret, frame = cap.read()
 
@@ -107,21 +116,24 @@ while ret:
 
     cv2.putText(frame, "0", (10, 20),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-    detected_face_encodings = face_recognition.face_encodings(frame)
-    for encodings in detected_face_encodings:
-        results = face_recognition.compare_faces([known_face_encoding], detected_face_encodings)
-        for result in results:
-            if result == True:
-                cv2.putText(frame, "1", (10, 20),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-
-
-
+    # detected_face_encodings = face_recognition.face_encodings(frame)
+    # for encodings in detected_face_encodings:
+    #     results = face_recognition.compare_faces([known_face_encoding], detected_face_encodings)
+    #     for result in results:
+    #         if result == True:
+    #             cv2.putText(frame, "1", (10, 20),
+    #                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+    result = test_image(frame, training_labels, training_encodings)
+    labels = map_file_pattern_to_label({"shah": "Shah rukh khan"}, result)
+    print("Frame: {} faces: {}".format(curr_frame, labels))
+    if csvwriter:
+        csvwriter.writerow([curr_frame, labels])
     cv2.imshow('frame', frame)
 
     key = cv2.waitKey(1) & 0xFF
     if key == ord('q'):
         break
-
+if csvfile:
+    csvfile.close()
 cap.release()
 cv2.destroyAllWindows()
