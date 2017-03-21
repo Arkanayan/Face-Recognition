@@ -50,6 +50,22 @@ def test_image(image_to_check, known_names, known_face_encodings):
 
     return result_encoding
 
+def map_file_pattern_to_label(labels_with_pattern, labels_list):
+    """
+    Map file name pattern to full label
+    :param labels_with_pattern: dict : { "file_name_pattern": "full_label" }
+    :param labels_list: list : list of labels of file names got from test_image()
+    :return: list of full labels
+    """
+    result_list = []
+    for key, label in labels_with_pattern.items():
+        for img_labels in labels_list:
+            if str(key).lower() in str(img_labels).lower():
+                if str(label) not in result_list:
+                    result_list.append(str(label))
+                # continue
+    # result_list = [label for key, label in labels_with_pattern if str(key).lower() in labels_list]
+    return result_list
 
 cap = cv2.VideoCapture(args["video"])
 
