@@ -43,14 +43,10 @@ def test_image(image_to_check, known_names, known_face_encodings):
     for unknown_encoding in unknown_encodings:
         result = face_recognition.compare_faces(known_face_encodings, unknown_encoding)
 
-        # results_encoding = [(image_to_check, name) for is_match, name in zip(result, known_names) \
-        # if is_match else (image_to_check, 'unknown_person')]
     result_encoding = []
-    for is_match, name in zip(result, known_names):
+    for nameIndex, is_match in enumerate(result):
         if is_match:
-            result_encoding.append(name)
-        else:
-            result_encoding.append('unknown_person')
+            result_encoding.append(known_names[nameIndex])
 
     return result_encoding
 
