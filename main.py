@@ -18,6 +18,9 @@ if args.get("images_dir", None) is None:
 if args.get("video", None) is None:
     print("Please check the path to video")
     exit()
+if args.get("output_csv", None) is None:
+    print("You haven't specified an output csv file. Nothing will be written.")
+
 
 
 # Helper functions
