@@ -69,9 +69,9 @@ for file in image_files_in_folder(args['images_dir']):
 
     if len(encodings) == 0:
         print("WARNING: No faces found in {}. Ignoring file.".format(file))
-
-    training_labels.append(basename)
-    training_encodings.append(encodings[0])
+    if len(encodings):
+        training_labels.append(basename)
+        training_encodings.append(encodings[0])
 
 # known_image = face_recognition.load_image_file(args["image"])
 # known_face_encoding = face_recognition.face_encodings(known_image)[0]
