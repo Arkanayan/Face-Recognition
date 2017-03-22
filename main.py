@@ -30,8 +30,6 @@ if upsample_rate is None:
     upsample_rate = 1
 
 # Helper functions
-
-
 def image_files_in_folder(folder):
     return [os.path.join(folder, f) for f in os.listdir(folder) if re.match(r'.*\.(jpg|jpeg|png)', f, flags=re.I)]
 
@@ -111,13 +109,19 @@ if args.get("output_csv", None) is not None:
 ret, firstFrame = cap.read()
 frameRate = cap.get(cv2.CAP_PROP_FPS)
 
+# Labels with file pattern, edit this
+label_pattern = {
+    "shah": "Shahrukh Khan",
+    "kapil": "Kapil Sharma"
+            }
+
 while ret:
     curr_frame = cap.get(1)
 
     ret, frame = cap.read()
 
     result = test_image(frame, training_labels, training_encodings, upsample_rate)
-    labels = map_file_pattern_to_label({"shah": "Shah Rukh khan", "kapil": "Kapil Sharma"}, result)
+    labels = map_file_pattern_to_label(label_pattern, result)
     curr_time = curr_frame / frameRate
     print("Time: {} faces: {}".format(curr_time, labels))
     if csvwriter:
