@@ -1,6 +1,6 @@
 # Face Recognizer
 
-Python script to recognize faces from video
+Python script to recognize faces in video
 
 ## Requirements
 - Install requirements using `pip install -r requirements.txt`
@@ -11,7 +11,7 @@ IMPORTANT NOTE: It's very likely that you will run into problems when pip tries 
 
 After manually installing dlib, try running pip3 install face_recognition again to complete your installation.
 ## Usage
-Run it using
+Run it like
 
 ```python main.py -i known_images -v video.mp4 -o output.csv --upsample-rate 2 ```
 
@@ -48,7 +48,7 @@ The output csv will be in this format
 9.16,   []
 
 ```
-The Delimiter is `,`. The first column is `time` elapsed in video and the second column is `list of labels`.
+The Delimiter is `,`. The first column is the `time` elapsed in the video and the second column is the `list of labels`.
 
 ## Credits
 
