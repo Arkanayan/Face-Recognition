@@ -101,11 +101,6 @@ for file in image_files_in_folder(args['images_dir']):
         training_labels.append(basename)
         training_encodings.append(encodings[0])
 
-# known_image = face_recognition.load_image_file(args["image"])
-# known_face_encoding = face_recognition.face_encodings(known_image)[0]
-
-ret, firstFrame = cap.read()
-
 csvfile = None
 csvwriter = None
 if args.get("output_csv", None) is not None:
@@ -119,23 +114,7 @@ while ret:
     curr_frame = cap.get(1)
 
     ret, frame = cap.read()
-    # face_locations = face_recognition.face_locations(frame)
-    # print(face_locations)
-    # cv2.putText(frame, "{}".format(len(face_locations)), (10, 20),
-    #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-    # for face_location in face_locations:
-    #     top, right, bottom, left = face_location
-    #     cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
 
-    cv2.putText(frame, "0", (10, 20),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-    # detected_face_encodings = face_recognition.face_encodings(frame)
-    # for encodings in detected_face_encodings:
-    #     results = face_recognition.compare_faces([known_face_encoding], detected_face_encodings)
-    #     for result in results:
-    #         if result == True:
-    #             cv2.putText(frame, "1", (10, 20),
-    #                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
     result = test_image(frame, training_labels, training_encodings, upsample_rate)
     labels = map_file_pattern_to_label({"shah": "Shah Rukh khan", "kapil": "Kapil Sharma"}, result)
     curr_time = curr_frame / frameRate
