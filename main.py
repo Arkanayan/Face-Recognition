@@ -10,10 +10,10 @@ import csv
 import os
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-i", "--images-dir", help="training image dir")
-parser.add_argument("-v", "--video", help="video to recognize faces on")
-parser.add_argument("-o", "--output-csv", help="Ouput csv file [Optional]")
-parser.add_argument("-u", "--upsample-rate", help="How many times to upsample the image looking for faces. Higher numbers find smaller faces. [Optional]")
+parser.add_argument("-i", "--images-dir", type=str, help="training image dir")
+parser.add_argument("-v", "--video", type=str, help="video to recognize faces on")
+parser.add_argument("-o", "--output-csv", type=str, help="Ouput csv file [Optional]")
+parser.add_argument("-u", "--upsample-rate", type=int, help="How many times to upsample the image looking for faces. Higher numbers find smaller faces. [Optional]")
 args = vars(parser.parse_args())
 
 if args.get("images_dir", None) is None and os.path.exists(args.get("images_dir", None)):
