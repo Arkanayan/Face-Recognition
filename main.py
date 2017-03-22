@@ -12,7 +12,8 @@ import os
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--images-dir", help="training image dir")
 parser.add_argument("-v", "--video", help="video to recognize faces on")
-parser.add_argument("-o", "--output-csv", help="Ouput csv file")
+parser.add_argument("-o", "--output-csv", help="Ouput csv file [Optional]")
+parser.add_argument("-u", "--upsample-rate", help="How many times to upsample the image looking for faces. Higher numbers find smaller faces. [Optional]")
 args = vars(parser.parse_args())
 
 if args.get("images_dir", None) is None and os.path.exists(args.get("images_dir", None)):
@@ -23,7 +24,8 @@ if args.get("video", None) is None and os.path.isfile(args.get("video", None)):
     exit()
 if args.get("output_csv", None) is None:
     print("You haven't specified an output csv file. Nothing will be written.")
-
+# By default upsample rate = 1
+upsample_rate = args.get("upsample_rate", 1)
 
 
 # Helper functions
@@ -33,7 +35,15 @@ def image_files_in_folder(folder):
     return [os.path.join(folder, f) for f in os.listdir(folder) if re.match(r'.*\.(jpg|jpeg|png)', f, flags=re.I)]
 
 
-def test_image(image_to_check, known_names, known_face_encodings):
+def test_image(image_to_check, known_names, known_face_encodings, number_of_times_to_upsample=1):
+    """
+    Test if faces are recognized in unknown image from known images
+    :param image_to_check: Numpy array of the image
+    :param known_names: List containing known labels
+    :param known_face_encodings: List containing training image labels
+    :param number_of_times_to_upsample: How many times to upsample the image looking for faces. Higher numbers find smaller faces.
+    :return: A list of labels of known names
+    """
     # unknown_image = face_recognition.load_image_file(image_to_check)
     unknown_image = image_to_check
     # Scale down the image to make it run faster
@@ -42,7 +52,7 @@ def test_image(image_to_check, known_names, known_face_encodings):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             unknown_image = scipy.misc.imresize(unknown_image, scale_factor)
-    face_locations = face_recognition.face_locations(unknown_image)
+    face_locations = face_recognition.face_locations(unknown_image, number_of_times_to_upsample)
     unknown_encodings = face_recognition.face_encodings(unknown_image, face_locations)
 
     result = []
@@ -126,7 +136,7 @@ while ret:
     #         if result == True:
     #             cv2.putText(frame, "1", (10, 20),
     #                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-    result = test_image(frame, training_labels, training_encodings)
+    result = test_image(frame, training_labels, training_encodings, upsample_rate)
     labels = map_file_pattern_to_label({"shah": "Shah Rukh khan", "kapil": "Kapil Sharma"}, result)
     curr_time = curr_frame / frameRate
     print("Time: {} faces: {}".format(curr_time, labels))
