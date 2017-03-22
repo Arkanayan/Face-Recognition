@@ -7,6 +7,7 @@ import face_recognition
 from PIL import Image
 import argparse
 import csv
+import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--images-dir", help="training image dir")
@@ -14,10 +15,10 @@ parser.add_argument("-v", "--video", help="video to recognize faces on")
 parser.add_argument("-o", "--output-csv", help="Ouput csv file")
 args = vars(parser.parse_args())
 
-if args.get("images_dir", None) is None:
+if args.get("images_dir", None) is None and os.path.exists(args.get("images_dir", None)):
     print("Please check the path to images folder")
     exit()
-if args.get("video", None) is None:
+if args.get("video", None) is None and os.path.isfile(args.get("video", None)):
     print("Please check the path to video")
     exit()
 if args.get("output_csv", None) is None:
