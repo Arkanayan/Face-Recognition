@@ -102,11 +102,13 @@ if args.get("output_csv", None) is not None:
     csvfile = open(args.get("output_csv"), 'w')
     csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 
+ret, firstFrame = cap.read()
+frameRate = cap.get(cv2.CAP_PROP_FPS)
+
 while ret:
     curr_frame = cap.get(1)
 
     ret, frame = cap.read()
-
     # face_locations = face_recognition.face_locations(frame)
     # print(face_locations)
     # cv2.putText(frame, "{}".format(len(face_locations)), (10, 20),
@@ -125,10 +127,11 @@ while ret:
     #             cv2.putText(frame, "1", (10, 20),
     #                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
     result = test_image(frame, training_labels, training_encodings)
-    labels = map_file_pattern_to_label({"shah": "Shah rukh khan"}, result)
-    print("Frame: {} faces: {}".format(curr_frame, labels))
+    labels = map_file_pattern_to_label({"shah": "Shah Rukh khan", "kapil": "Kapil Sharma"}, result)
+    curr_time = curr_frame / frameRate
+    print("Time: {} faces: {}".format(curr_time, labels))
     if csvwriter:
-        csvwriter.writerow([curr_frame, labels])
+        csvwriter.writerow([curr_time, labels])
     cv2.imshow('frame', frame)
 
     key = cv2.waitKey(1) & 0xFF
