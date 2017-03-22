@@ -25,8 +25,9 @@ if args.get("video", None) is None and os.path.isfile(args.get("video", None)):
 if args.get("output_csv", None) is None:
     print("You haven't specified an output csv file. Nothing will be written.")
 # By default upsample rate = 1
-upsample_rate = args.get("upsample_rate", 1)
-
+upsample_rate = args.get("upsample_rate", None)
+if upsample_rate is None:
+    upsample_rate = 1
 
 # Helper functions
 
