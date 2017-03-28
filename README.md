@@ -26,7 +26,7 @@ You can test using the video from [youtube](https://www.youtube.com/watch?v=WLVi
 
 To download the video
 ```
-youtube-dl https://www.youtube.com/watch?v=WLVi7_B2wBM
+youtube-dl -f 135 --output "video.%(ext)s" https://www.youtube.com/watch?v=WLVi7_B2wBM
 ```
 ### Recognize labels
 Edit `label_pattern` variable in the file `main.py`
