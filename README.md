@@ -21,6 +21,13 @@ Run it like
 - **-o** or **--output-csv** The csv file to write the output.
 - **-u** or **--upsample-rate** [Integer] How many times to upsample the image looking for faces. Higher numbers find smaller faces. 
 
+### Test video
+You can test using the video from [youtube](https://www.youtube.com/watch?v=WLVi7_B2wBM)
+
+To download the video
+```
+youtube-dl https://www.youtube.com/watch?v=WLVi7_B2wBM
+```
 ### Recognize labels
 Edit `label_pattern` variable in the file `main.py`
 The sample pattern is 
