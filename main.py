@@ -16,10 +16,10 @@ parser.add_argument("-o", "--output-csv", type=str, help="Ouput csv file [Option
 parser.add_argument("-u", "--upsample-rate", type=int, help="How many times to upsample the image looking for faces. Higher numbers find smaller faces. [Optional]")
 args = vars(parser.parse_args())
 
-if args.get("images_dir", None) is None and os.path.exists(args.get("images_dir", None)):
+if args.get("images_dir", None) is None or os.path.exists(args.get("images_dir", None)):
     print("Please check the path to images folder")
     exit()
-if args.get("video", None) is None and os.path.isfile(args.get("video", None)):
+if args.get("video", None) is None or os.path.isfile(args.get("video", None)):
     print("Please check the path to video")
     exit()
 if args.get("output_csv", None) is None:
